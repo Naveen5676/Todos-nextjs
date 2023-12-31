@@ -12,7 +12,9 @@ export default function Addtodosform(props) {
 
     const taskdata = {
       task: enteredtask,
+      completed: false,
     };
+    
 
     props.ontasksubmit(taskdata);
   }
