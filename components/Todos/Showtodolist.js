@@ -6,9 +6,9 @@ export default function ShowtodoList(props) {
   async function completedHandler(id) {
     const response = await fetch("/api/completedtodos", {
       method: "PATCH",
-      body: JSON.stringify({id:id.toString() }),
+      body: JSON.stringify({ id: id.toString() }),
       headers: {
-        'Content-Type': 'application/json',
+        "Content-Type": "application/json",
       },
     });
     if (response.ok) {
@@ -16,7 +16,24 @@ export default function ShowtodoList(props) {
       console.log(result.message);
     } else {
       const errorResult = await response.json();
-      console.error('Error updating document:', errorResult.message);
+      console.error("Error updating document:", errorResult.message);
+    }
+  }
+
+  async function deleteHandler(id) {
+    const res = await fetch("/api/deletetodos", {
+      method: "DELETE",
+      body: JSON.stringify({ id: id.toString() }),
+      headers: {
+        "Content-Type": "application/json",
+      },
+    });
+    if (res.ok) {
+      const result = await res.json();
+      console.log(result.message);
+    } else {
+      const errorResult = await res.json();
+      console.error("Error updating document:", errorResult.message);
     }
   }
 
@@ -48,7 +65,12 @@ export default function ShowtodoList(props) {
                   >
                     Completed
                   </Button>
-                  <Button variant="danger">Delete</Button>
+                  <Button
+                    variant="danger"
+                    onClick={() => deleteHandler(todo.id)}
+                  >
+                    Delete
+                  </Button>
                 </div>
               </Col>
             ))}
