@@ -1,8 +1,21 @@
-import React from "react";
+import React, { useRef } from "react";
 import { Button, Card } from "react-bootstrap";
 import "bootstrap/dist/css/bootstrap.min.css";
 
-export default function Addtodosform() {
+export default function Addtodosform(props) {
+  const task = useRef();
+
+  function onsubmitHandler(e) {
+    e.preventDefault();
+
+    const enteredtask = task.current.value;
+
+    const taskdata = {
+      task: enteredtask,
+    };
+
+    props.ontasksubmit(taskdata);
+  }
   return (
     <div
       className="d-flex justify-content-center align-items-center"
@@ -17,16 +30,18 @@ export default function Addtodosform() {
       >
         <Card.Title>Add Todo</Card.Title>
         <Card.Body style={{ fontSize: "20px" }}>
-          <form>
+          <form onSubmit={onsubmitHandler}>
             <div className="text-left">
-              <label style={{ float: "left" }}>Enter Info</label>
+              <label style={{ float: "left" }} >
+                Enter Task
+              </label>
             </div>
-            <input type="text" style={{ width: "100%" }}></input>
+            <input type="text" style={{ width: "100%" }} ref={task}></input>
+            <div style={{ display: "flex", justifyContent: "flex-end" , marginTop:'20px'}}>
+              <Button type="submit">Submit</Button>
+            </div>
           </form>
         </Card.Body>
-        <div style={{ display: "flex", justifyContent: "flex-end" }}>
-          <Button>Submit</Button>
-        </div>
       </Card>
     </div>
   );
