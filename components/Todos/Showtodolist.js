@@ -3,6 +3,23 @@ import { Button, Card, Row, Col } from "react-bootstrap";
 import "bootstrap/dist/css/bootstrap.min.css";
 
 export default function ShowtodoList(props) {
+  async function completedHandler(id) {
+    const response = await fetch("/api/completedtodos", {
+      method: "PATCH",
+      body: JSON.stringify({id:id.toString() }),
+      headers: {
+        'Content-Type': 'application/json',
+      },
+    });
+    if (response.ok) {
+      const result = await response.json();
+      console.log(result.message);
+    } else {
+      const errorResult = await response.json();
+      console.error('Error updating document:', errorResult.message);
+    }
+  }
+
   return (
     <div
       className="d-flex justify-content-center align-item-center"
@@ -23,11 +40,15 @@ export default function ShowtodoList(props) {
             {props.todos.map((todo) => (
               <Col key={todo.id}>
                 <div className="d-flex align-items-center">
-                    <p style={{ marginRight: "10px" }}>{todo.task}</p>
-                    <Button variant="success" style={{ marginRight: "5px" }}>
-                      Completed
-                    </Button>
-                    <Button variant="danger">Delete</Button>
+                  <p style={{ marginRight: "10px" }}>{todo.task}</p>
+                  <Button
+                    variant="success"
+                    style={{ marginRight: "5px" }}
+                    onClick={() => completedHandler(todo.id)}
+                  >
+                    Completed
+                  </Button>
+                  <Button variant="danger">Delete</Button>
                 </div>
               </Col>
             ))}
